@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>MNIST Vision | Digit Recognizer</title>
+   <link rel="stylesheet" href="/static/css/style.css"/>
+</head>
+<body>
+
+    <!-- Custom Cursor -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <!-- Loading Overlay -->
+    <div id="loader" class="loader-wrapper">
+        <div class="loader-spinner"></div>
+        <div class="loader-text">Initializing Model...</div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a class="navbar-brand" href="#">
+            🔢 <span>MNIST</span> Vision
+        </a>
+        <span class="navbar-badge">Build By Viraj</span>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="main-container">
+
+        <!-- Hero -->
+        <div class="hero">
+            <h1>Handwritten Digit Recognizer</h1>
+            <p>Draw any digit from 0 to 9 and watch
+            our AI identify it in real time</p>
+            <div class="hero-badges">
+                <span class="hero-badge">PyTorch CNN</span>
+                <span class="hero-badge">MNIST Trained</span>
+                <span class="hero-badge">99.42% Accuracy</span>
+                <span class="hero-badge">Real Time</span>
+                <span class="hero-badge">FastAPI</span>
+            </div>
+        </div>
+
+        <!-- Two Panel Layout -->
+        <div class="panels">
+
+            <!-- LEFT PANEL - Canvas -->
+            <div class="glass-card" id="canvas-card">
+
+                <!-- Canvas Header -->
+                <div class="canvas-header">
+                    <h2>Draw a Digit (0-9)</h2>
+                    <div class="brush-controls">
+                        <label>Brush:</label>
+                        <button class="brush-btn"
+                            data-size="10">
+                            <div class="brush-dot"
+                                style="width:6px;height:6px;">
+                            </div>
+                        </button>
+                        <button class="brush-btn active"
+                            data-size="18">
+                            <div class="brush-dot"
+                                style="width:10px;height:10px;">
+                            </div>
+                        </button>
+                        <button class="brush-btn"
+                            data-size="28">
+                            <div class="brush-dot"
+                                style="width:16px;height:16px;">
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Canvas -->
+                <div class="canvas-wrapper">
+                    <canvas id="digitCanvas"
+                        width="320" height="320">
+                    </canvas>
+                </div>
+
+                <!-- Controls -->
+                <div class="controls">
+                    <button class="btn btn-danger"
+                        id="clearBtn">
+                        Clear
+                    </button>
+                    <button class="btn btn-secondary"
+                        id="undoBtn">
+                        Undo
+                    </button>
+                    <button class="btn btn-primary"
+                        id="predictBtn">
+                        Predict
+                    </button>
+                </div>
+
+            </div>
+            <!-- END LEFT PANEL -->
+
+
+            <!-- RIGHT PANEL - Results -->
+            <div class="glass-card">
+                <div class="card-title">
+                    AI Prediction Results
+                </div>
+
+                <!-- Loading -->
+                <div class="loading-overlay"
+                    id="loading-overlay">
+                    <div class="spinner"></div>
+                    <div class="loading-text">
+                        ANALYZING DIGIT...
+                    </div>
+                </div>
+
+                <!-- Placeholder -->
+                <div class="result-placeholder"
+                    id="result-placeholder">
+                    <span class="icon">🤖</span>
+                    Draw a digit on the canvas<br/>
+                    <small>AI will predict automatically!</small>
+                </div>
+
+                <!-- Main Prediction -->
+                <div class="prediction-display"
+                    id="prediction-display">
+                    <span class="predicted-digit"
+                        id="predicted-digit">0</span>
+                    <div class="confidence-text">
+                        Confidence:
+                        <span class="confidence-value"
+                            id="confidence-value">0%</span>
+                    </div>
+                </div>
+
+                <!-- All Probabilities -->
+                <div class="all-probs-title"
+                    id="all-probs-title">
+                    All Digit Probabilities
+                </div>
+
+                <!-- Bars for all 10 digits -->
+                <!-- Digit 0 -->
+                <div class="prob-bar" id="prob-bar-0">
+                    <div class="prob-bar-header">
+                        <span class="prob-label">Digit 0</span>
+                        <span class="prob-value"
+                            id="conf-0">0%</span>
+                    </div>
+                    <div class="bar-track">
+                        <div class="bar-fill"
+                            id="fill-0"></div>
+                    </div>
+                </div>
+
+                <!-- Digit 1 -->
+                <div class="prob-bar" id="prob-bar-1">
+                    <div class="prob-bar-header">
+                        <span class="prob-label">Digit 1</span>
+                        <span class="prob-value"
+                            id="conf-1">0%</span>
+                    </div>
+                    <div class="bar-track">
+                        <div class="bar-fill"
+                            id="fill-1"></div>
+                    </div>
+                </div>
+
+                <!-- Digit 2 -->
+                <div class="prob-bar" id="prob-bar-2">
+                    <div class="prob-bar-header">
+                        <span class="prob-label">Digit 2</span>
+                        <span class="prob-value"
+                            id="conf-2">0%</span>
+                    </div>
+                    <div class="bar-track">
+                        <div class="bar-fill"
+                            id="fill-2"></div>
+                    </div>
+                </div>
+
+                <!-- Digit 3 -->
+                <div class="prob-bar" id="prob-bar-3">
+                    <div class="prob-bar-header">
+                        <span class="prob-label">Digit 3</span>
+                        <span class="prob-value"
+                            id="conf-3">0%</span>
+                    </div>
+                    <div class="bar-track">
+                        <div class="bar-fill"
+                            id="fill-3"></div>
+                    </div>
+                </div>
+
+                <!-- Digit 4 -->
+                <div class="prob-bar" id="prob-bar-4">
+                    <div class="prob-bar-header">
+                        <span class="prob-label">Digit 4</span>
+                        <span class="prob-value"
+                            id="conf-4">0%</span>
+                    </div>
+                    <div class="bar-track">
+                        <div class="bar-fill"
+                            id="fill-4"></div>
+                    </div>
+                </div>
+
+                <!-- Digit 5 -->
+                <div class="prob-bar" id="prob-bar-5">
+                    <div class="prob-bar-header">
+                        <span class="prob-label">Digit 5</span>
+                        <span class="prob-value"
+                            id="conf-5">0%</span>
+                    </div>
+                    <div class="bar-track">
+                        <div class="bar-fill"
+                            id="fill-5"></div>
+                    </div>
+                </div>
+
+                <!-- Digit 6 -->
+                <div class="prob-bar" id="prob-bar-6">
+                    <div class="prob-bar-header">
+                        <span class="prob-label">Digit 6</span>
+                        <span class="prob-value"
+                            id="conf-6">0%</span>
+                    </div>
+                    <div class="bar-track">
+                        <div class="bar-fill"
+                            id="fill-6"></div>
+                    </div>
+                </div>
+
+                <!-- Digit 7 -->
+                <div class="prob-bar" id="prob-bar-7">
+                    <div class="prob-bar-header">
+                        <span class="prob-label">Digit 7</span>
+                        <span class="prob-value"
+                            id="conf-7">0%</span>
+                    </div>
+                    <div class="bar-track">
+                        <div class="bar-fill"
+                            id="fill-7"></div>
+                    </div>
+                </div>
+
+                <!-- Digit 8 -->
+                <div class="prob-bar" id="prob-bar-8">
+                    <div class="prob-bar-header">
+                        <span class="prob-label">Digit 8</span>
+                        <span class="prob-value"
+                            id="conf-8">0%</span>
+                    </div>
+                    <div class="bar-track">
+                        <div class="bar-fill"
+                            id="fill-8"></div>
+                    </div>
+                </div>
+
+                <!-- Digit 9 -->
+                <div class="prob-bar" id="prob-bar-9">
+                    <div class="prob-bar-header">
+                        <span class="prob-label">Digit 9</span>
+                        <span class="prob-value"
+                            id="conf-9">0%</span>
+                    </div>
+                    <div class="bar-track">
+                        <div class="bar-fill"
+                            id="fill-9"></div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- END RIGHT PANEL -->
+
+        </div>
+        <!-- END PANELS -->
+
+    </div>
+    <!-- END MAIN CONTAINER -->
+
+   <script src="/static/js/script.js"></script>
+</body>
+</html>

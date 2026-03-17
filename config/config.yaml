@@ -1,0 +1,32 @@
+# config.yaml - All hyperparameters in one place
+# Change values here without touching any code!
+
+model:
+  name: "MNISTNet"
+  input_channels: 1
+  num_classes: 10
+
+training:
+  batch_size: 64
+  epochs: 15
+  learning_rate: 0.001
+  early_stopping_patience: 3
+  validation_split: 0.1
+  seed: 42
+
+augmentation:
+  enabled: true
+  rotation_degrees: 10
+  shift_percent: 0.1
+
+paths:
+  data_dir: "data/"
+  model_dir: "models/"
+  log_dir: "logs/"
+  best_model: "models/mnist_model.pth"
+  training_log: "logs/training_log.csv"
+
+api:
+  host: "127.0.0.1"
+  port: 8000
+  debug: true
