@@ -1,7 +1,28 @@
+# Virtual Environment
 venv/
+
+# Python cache
 __pycache__/
 *.pyc
 *.pyo
+*.pyd
+
+# Environment variables
 .env
+.env.local
+
+# Data folder (too large for GitHub)
 data/
-logs/*.png
+
+# Uploaded images (temporary files)
+static/uploads/*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# VS Code settings
+.vscode/
+
+# Jupyter notebooks checkpoints
+.ipynb_checkpoints/
