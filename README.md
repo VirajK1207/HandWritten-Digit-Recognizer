@@ -1,7 +1,6 @@
-notepad README.md
-```
-Paste this:
-```
+## Live Demo
+https://your-app-name.onrender.com
+
 # Handwritten Digit Recognizer
 
 End-to-end production ML system for handwritten
